@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+
+    db:
+        image: mysql:8.0.19
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - ./db:/var/lib/mysql
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        restart: always
+        ports:
+            - "3306:3306"
+        networks:
+            - backend
+
+    app:
+        build:
+            context: ./src 
+            dockerfile: Dockerfile
+        volumes:
+            - ./src:/var/www/html
+            - ./wait-for.sh:/bin/wait
+        environment:
+            WAIT_HOSTS: db:3306
+        ports:
+            - "3333:3333"
+        command: sh -c '/bin/wait db:3306 -t 360 -- yarn install && yarn start'
+        networks:
+            - backend
+        depends_on:
+            - db
+
+networks:
+    backend:

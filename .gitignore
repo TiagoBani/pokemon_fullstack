@@ -1,3 +1,16 @@
+# environments
+.env
+src/pokemon/.env
+
+# Dependencies
+src/pokemon/node_modules
+
+# database files
+db
+
+# build temp
+src/build
+
 # Logs
 logs
 *.log
