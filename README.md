@@ -10,3 +10,8 @@ docker-compose up -d
 ```bash
 docker-compose logs -tf
 ```
+
+#### Commands CLI #####
+```bash
+docker-compose exec app node ace ${command}
+```
